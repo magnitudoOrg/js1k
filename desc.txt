@@ -1,0 +1,13 @@
+Watch molecules like alcohol, acid, ether, methane, ethane, ammonia, amines, water...(wait 3s or refresh to speed up) see desc
+
+Generates molecules like alcohol, acid, ether, methane, ethane, ammonia, amines, alkanes, alkanols, water.
+Subscript in formula looks best in Firefox, okay in Chrome, worst in IE 11, Edge not tested
+
+Features:
+- 2.5 D Molecule with approx. real atom distances and radius ratio (H < C), angles real for most m.
+- Chemical empirical formula
+- Molecule name or group name
+- Symbol for a characteristic property of the molecule (burnable, toxic, ... ;)
+- gen. ~100 unique molecules, opt. like balanced distribution of occurrences
+
+
