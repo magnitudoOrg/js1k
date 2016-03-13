@@ -91,7 +91,7 @@ module.exports = function(grunt) {
   
   grunt.registerTask('compile', function() {
     var fs = require('fs'),
-        demo = fs.readFileSync('build/demo.zip.js'),
+        demo = fs.readFileSync('build/demo.zip.js', {encoding: 'utf8'}),
         shim = fs.readFileSync('shim.html', {encoding: 'utf8'}),
 		shim64 = fs.readFileSync('shim.html', {encoding: 'utf8'}),
         base64 = new Buffer(demo).toString('base64');

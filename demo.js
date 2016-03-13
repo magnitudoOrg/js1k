@@ -1,18 +1,25 @@
 
 /* 
  * Real Molecules 1kB demo by Oliver Güther 
- * Orig. for JS1k 2016 contest
+ * Orig. for JS1k 2016 Let's get eleMental! contest
  *
  * Minified and compressed with UglifyJS and RegPack 4.
  * Code redundancy increased to compress well with RegPack.
  *
- * Atomic radius ratio and angles are approx. correct for most m.
+ * Generates molecules like alcohol, acid, ether, methane, ethane, ammonia, amines, alkanes, alkanols, water.
+ * Subscript in formula looks best in Firefox, okay in Chrome, worst in IE 11, Edge not tested.
+ * 
+ * Features:
+ * - Generates 30 real existing unique molecules
+ * - 2.5D Molecule with approx. real atom distances and radius ratio (H < C), angles ~real for most m.
+ * - Chemical empirical formula
+ * - Molecule name or group name
+ * - Symbol for a characteristic property of the molecule (burnable, toxic, fishy smell... ;)
  *
- * Thanks to JS1k organizers/contributors/participants, RegPack and UglifyJS!
+ * Thanks to JS1k organizers/contributors/participants, RegPack and UglifyJS developers!
  *
  */  
- 
- 
+  
 q = 1,
 R = '^10,^20,^30,^330,^130,^3310|^1330,^310,^3+0,^3+10|^13+0,2', // Regex for the following molecules/groups
 T = 'water,ammonia,methane,ethane,methyl alcohol,alcohol,formic acid,alkane group,alkanol group,amine group,ether group',
@@ -24,7 +31,7 @@ C = function(j, k, l, m, n) {
     c.globalCompositeOperation = n ? 'destination-over' : 'source-over';
 
     for (i = 18 - n + (j.t&&9); i--;) {        
-        c.fillStyle = 'hsl(' + (j.t%2 ? 0 : 220) + ',' + (j.t%3 ? 7 : 0) + '0%,' + (n ? 92 : i*i/9 + (!j.t ? 75 : j.t%3 ? 5 : -25))  + '%)';
+		c.fillStyle = 'hsl(' + [j.t%2 ? 0 : 220, (j.t%3 ? 8 : 0) + '0%', (n ? 74 : (!j.t ? 147 : j.t%3 ? 80 : 55) - 60*Math.sin(i/9))  + '%)'];
         c.beginPath();
         c.arc(l, m, i, Math.PI + j.o + (j.t?.8:1.6), Math.PI + j.o + 6.3 - (j.t?.8:1.6), 0);  // not: 11 for PI/2
         c.fill();
@@ -81,6 +88,7 @@ S = function(j, k, l, m, n) {
 	
 	// Debug code for balancing
 	//c.font = '12px s'; window.cnt = window.cnt || 0; window.A = window.A || [0,0,0,0,0,0,0,0,0,0,0]; A[t]++; cnt++; for (aa in A) c.fillText(~~(100*(A[aa]/cnt)), aa*28, 400);c.font = 'small-caps 20px s';
+	//window.A = window.A || {}; A[h] = 1; c.fillText(Object.keys(A).length, 100, 20); // count molecules
 }
 
 
@@ -94,7 +102,7 @@ U = function(j, k, l, m, n) {
     S({t: 0, o: q*2.6}, 0, 20, 350, 0);
 	
 	// Debug code for a distinct molecule
-	//if (h.match(/^3310/)) clearInterval(iid);
+	//if (h.match(/^21330/)) clearInterval(iid);
 }
 //iid = setInterval(U,0) // scroll to molecule to debug
 
