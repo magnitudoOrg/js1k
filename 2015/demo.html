@@ -1,0 +1,355 @@
+
+<!doctype html>
+<html>
+  <!-- note: your demo in this shim runs in an iframe with this content: https://gist.github.com/qfox/3cccc4f36c8319e09bb7 -->
+  <!--
+  (c) js1k.com 2015
+  Note: submissions belong to their respectful owner, do not copy without their consent
+  -->
+  <head>
+    <meta charset="utf-8">
+    <title>JS1k 2015 - NNNN - TITLE</title>
+    <meta name="author" content="YOU">
+    <link rel="icon" type="image/png" href="http://js1k.com/favicon.png">
+    <link rel="canonical" href="http://js1k.com/2015-hypetrain/demo/NNNN">
+    <link rel="shortlink" href="http://js1k.com/NNNN">
+    <script>
+      // GA
+    </script>
+    <style>
+      /* http://qfox.nl/notes/333 */
+      body,html,iframe{margin:0;padding:0;border:0;width:100%;height:100%}
+      iframe{position:absolute;top:0;left:0;padding-top:50px;box-sizing:border-box}
+      header{position:relative;z-index:1;height:47px;padding-top:2px;border-bottom:1px solid #000;box-shadow:0 -10px 25px #ccc inset;background-color:#eee}
+      aside,div,h1,p{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-align:center;font-size:16px;font-weight:inherit;line-height:22px;padding:0;margin:0;cursor:default}
+      aside,h1{display:inline}
+      a{color:#000;text-decoration:none;border-bottom:1px dashed #000}
+      a:hover{border-bottom:1px solid red}
+      a[href="0"]{text-decoration:line-through;pointer-events:none;border-bottom:0;color:#ccc}
+      .button{float:left;width:40px;height:40px;line-height:40px;text-align:center;padding:0;margin:2px 0 0 10px;border:1px solid #888;border-color:#ddd #888 #888 #ddd;font-family:sans-serif;font-size:30px;font-weight:700;cursor:pointer}
+      .button:hover{color:red;border-bottom-color:#888}
+      .r{margin-right:10px}
+      time{display:none}
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1>
+          <a href="http://js1k.com/">JS1k</a>
+          <a href="http://js1k.com/2015-hypetrain">2015</a>
+          <strong></strong> demo
+          &mdash;
+          "Connect Four 3D" by Oliver Güther
+        </h1>
+        <p>
+          <em>
+            Click on the field to position your ball! Click BELOW the field to confirm your move and let the AI work. The winner will be hyped.
+          </em>
+        </p>
+        <aside>
+          &mdash;
+          1018 bytes
+          &mdash;
+          <a href="http://js1k.com/2015-hypetrain/details/NNNN">demo details</a>
+          &mdash;
+          <a href="http://js1k.com/2015-hypetrain/demos">list of demos</a>
+          &mdash;
+          <a href="http://js1k.com/1955" title="short link for your mobile devices" rel="nofollow">js1k.com/NNNN</a>
+          <time datetime="NOW" pubdate>NOW</time>
+        </aside>
+      </div>
+
+      <a href="500" class="button p">&Larr;</a>
+      <a href="502" class="button n">&Rarr;</a>
+    </header>
+
+    <script type="shim">
+      // SHIM (will be ran in the context of the iframe...)
+
+      // unprefix some popular vendor prefixed things (but stick to their original name)
+      iwin.AudioContext = iwin.AudioContext || iwin.webkitAudioContext; // ios8 unmutes audio only during the first user triggered event with sound
+      iwin.requestAnimationFrame = iwin.requestAnimationFrame || iwin.mozRequestAnimationFrame || iwin.webkitRequestAnimationFrame || iwin.msRequestAnimationFrame || function(f){ iwin.setTimeout(f, 1000/30); };
+      canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock || canvas.webkitRequestPointerLock;
+      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+      a = canvas;
+      b = idoc.body;
+
+      if (webgl) iwin.c = canvas.getContext('2d');
+      else iwin.g = (function () {
+        iwin.onorientationchange = iwin.onresize = null;
+        try {
+          var o = { antialias: true, stencil: true };
+          var gl = canvas.getContext('webgl', o) || canvas.getContext('experimental-webgl', o);
+
+          // keep in scope, must not be garbage collected
+          iwin.__glExts =
+            [ 'OES_texture_float', 'OES_texture_float_linear', 'OES_standard_derivatives',
+              'EXT_texture_filter_anisotropic', 'MOZ_EXT_texture_filter_anisotropic', 'WEBKIT_EXT_texture_filter_anisotropic',
+              'WEBGL_compressed_texture_s3tc', 'MOZ_WEBGL_compressed_texture_s3tc', 'WEBKIT_WEBGL_compressed_texture_s3tc'
+            ].map(function(ext) {
+                return gl.getExtension(ext);
+              });
+        } catch (e) {
+          idoc.body.innerHTML = 'WebGL not supported.';
+          iwin.a=iwin.b=iwin.c=iwin.d=null;
+          throw e;
+        }
+
+        return gl;
+      })();
+    </script>
+    <script>
+      // submission form configurables:
+
+      // enable canvas shim at all? (2d/3d). other settings are ignored if this is false.
+      var TOKEN_CANVAS_SHIM = true;
+      // true enables webgl shim (exposes `g`), false enables canvas shim (exposes `c`)
+      var TOKEN_WEBGL = false;
+      // px, 0 means always 100%
+      var TOKEN_MAX_WIDTH = 400;
+      // px, 0 means always 100%
+      var TOKEN_MAX_HEIGHT = 500;
+      // only if width<100%
+      var TOKEN_CENTER_CANVAS = true;
+      // "press" reload button on orientation change?
+      var TOKEN_RELOAD_ONORIENTATIONCHANGE = true;
+    </script>
+    <script type="demo">
+        
+/* 
+ * Hyped Connect Four 3D by Oliver Güther 
+ * Written for JS1k 2015 contest
+ *
+ * Thanks to JS1k team/contributors/participants, RegPack and UglifyJS!
+ *
+ * Minified and compressed with UglifyJS 2 and RegPack 3.0.2
+ * Some hand opt. after Uglify like return; -> return ;
+ * 
+ * Code is written very redundant at some parts to feed RegPack.
+ *
+ * used global vars: abc ACELPUWXY
+ * global vars used for local purpose: dipusvxyz
+ * used function name vars: BHJ  with params: jklm
+ */        
+ 
+// No Math shortcuts - RegPack will do it better    
+// M = Math, R = Math.random, S = Math.sin, O = Math.cos,
+
+E = 1e3,    // perspective and -cameraZ
+C = [],     // the game cube 4x4x4 
+A =         // cube turning angle    
+Y = 0,      // y for last position 
+L = 70,     // grid size
+X = 15;     // x + 4*z for last clicked position; 
+            // 15 for consistent user experience AND allow AI to do the first move  
+//P = 1     // player 1 or -1
+//W = 0     // win marker
+
+      
+// init cube C
+// RegPack: using a one dim array[64] instead 3 dim array doesn't seem to help
+// RegPack: writing this init code twice will gain 6B 
+// vs putting a undefined check for C in render function p = y > 3 ? .1 : C[0] && C[z][y][x];
+for (z = 4; z--;)   
+  for (C[z] = [], y = 4; y--;)  
+    C[z][y] = [0,0,0,0];
+
+P = 1;
+W = 0;
+
+
+// user input handler, j = event
+// written very redundant: RegPack is hungry
+b.onclick = function(j, k, l, m) {
+ 
+    // win? re-init after mouse click
+    if (W) {
+        for (z = 4; z--;)   
+          for (C[z] = [], y = 4; y--;)  
+            C[z][y] = [0,0,0,0]; 
+             
+        P = 1;
+        W = 0;
+        //X = 15; optional
+    }
+
+    // user move confirmed -> AI move; optional add j.buttons > 0 || j.which > 1 || 
+    if (j.pageY > 400) { 
+        
+        // user win?
+        if (H(X%4, Y, X%16/4|0) && (W = 1))
+            return;            
+        
+        P*=-1;  
+        U = X; // save user move; RegPack: don't do U <-> X
+        for(;X >= 0;) {
+            // check for direct win
+            for (X = 16;X--;) {
+                Y = B(P, X%4, X%16/4|0, 1)
+                if (H(X%4, Y, X%16/4|0) && (W = 1))
+                    break; 
+            }
+            
+            if (!W) {
+                // check for opponent (user) win; RegPack: wanted redundancy to the loop above
+                P*=-1; // RegPack: prefer this to param for H()
+                for (X = 16;X--;) {
+                    Y = B(P, X%4, X%16/4|0, 1)
+                    if (H(X%4, Y, X%16/4|0) && (W = 1))
+                        break;    
+                }
+                P*=-1; 
+            }
+            if (!W) {
+                
+                // try a move close to user pos (higher p. to block traps)
+                X = U++ + (4*Math.random()|0);
+                
+                // prevent stupid move (10B too much)
+                //P*=-1;
+                //Y = B(P, X%4, X%16/4|0, 1)
+                //if (H(X%4, Y, X%16/4|0) && (W = 1))
+                //    X++; 
+                //P*=-1;
+                
+                // by adding variety AI will play more interesting, but weaker in blocking traps
+                // ..(4*Math.random()|0 || 16*Math.random()|0);                    
+            }
+            
+            Y = B(P, X%4, X%16/4|0); // now set the ball (non-virtual)
+            W = 0; // reset win cause it maybe marked for virtual move      
+            if (Y < 4) break;
+        } 
+        
+        // AI win?
+        if (H(X%4, Y, X%16/4|0) && (W = 1))
+            return;  
+              
+        P*=-1; 
+         
+        Y = 4; 
+        X = -1;         // prevent back-to-back AI moves
+    } else {            // positioning mode
+        
+        for(;;) {       // loop to skip illegal moves
+            if (Y < 4)  // RegPack: don't replace with Y < 4 && ... here! original: if (X >= 0 && Y < 4) 
+                C[X%16/4|0][Y][X%4] = 0;  // clear last test pos
+            X++;  
+            Y = B(P, X%4, X%16/4|0);         
+            if (Y < 4) break;
+        } 
+    }            
+}
+
+
+// winCheck(x, y, z) for current player P 
+// thread counter, rating and Minimax dev suspended because of time and 1K limit
+H = function(j, k, l, m) {   
+
+    for (u = -1; u <= 1; u++) {
+      for (v = -1; v <= 1; v++) {
+        for (w = -1; w <= 1; w++) {
+          // dont need double checks for opp. dir  
+          if (!w && !v && !u) // no dir; Uglify/RegPack will invert/optimze this 
+            continue;
+
+          m = 0; // ball counter for P
+          for (i = -3; i <= 3; i++) {
+            z = l + i*u, y = k + i*v, x = j + i*w;
+            if (z < 0 || z > 3 || y < 0 || y > 3 || x < 0 || x > 3) {
+              continue; 
+            }
+
+            (!i || C[z][y][x] == P) && m++; // !i -> trust that given pos is for P -> opt. for 'virtual' AI win checks 
+                         
+          }
+          if (m > 3) 
+            return 1; 
+        }
+      }
+    }
+}
+
+
+// setBall(player, x, z, virtualMove); returns 4 for invalid move
+B = function (j, k, l, m) {     
+    for (y = 3;C[l][y][k] != 0;y--) {         
+        if (y == 0) return 4;
+    }
+    if (!m) C[l][y][k] = j; // RegPack: no gain for !m && (C...)
+    return y;
+};
+
+
+// scene transform and project3d(x, y, z)
+// Optional: put it inline
+J = function (j, k, l, m) { 
+    i = j * Math.cos(A) + l * Math.sin(A),      // x'
+    m = j * -Math.sin(A) + l * Math.cos(A);     // z'         
+    u = (i * E) / (m  + E) + 200, 
+    v = ((k + 200) * E) / (m  + E);
+    return {x: u, y: v, z: m};
+};
+
+
+// render loop    
+setInterval(function(j, k, l, m) {  
+
+    c.clearRect(0,0,E,E);
+      
+    d = [];                       // push ball render data in array for z-sort
+    for (z = 4; z--;) {
+      for (y = 0; y < 5; y++)  {  // RegPack: y = 5; --y; -> no gain; 5 for ground plate
+        for (x = 4; x--;) {
+          p = y > 3 ? .1 : C[z][y][x];
+          if (p) {            
+            m = J(x*L - 100, y*L/2 + W*Math.sin(A*20 - d.length), z*L - 100); // RegPack: 1.5*L replaced with 100 for 4-6 bytes gain       
+            d.push({
+                m: m, 
+                p: p,
+                // ball wobbel effect
+                r: L/4 - m.z/45 - (p*Math.sin(A*20 - d.length)) - 1,                 
+                // put light with hype for winner in this loop to prevent flickering
+                l: W && p == P ? 6 + 4*Math.sin(A*20 - d.length) : 6 * Math.abs(p) }); 
+          }    
+        }          
+      }
+    } 
+    d.sort(function(j, k, l, m) {return j.m.z - k.m.z;}); // z-sort
+      
+    for (z = d.length; z--;) {                    // 1B gain for unsafe op: for (z in d)
+      u = d[z]; // u = currBall
+      
+      // p = u.p; or with(u)                       // RegPack: no gain
+      // c.createRadialGradient() + addColorStop() // RegPack: no gain
+      
+      for (x = 0; x < u.r; x++) { // Not: x = u.r; x--;  x+=2 for better performance and little less quality 
+        c.beginPath();
+        c.arc(u.m.x, u.m.y, u.r - x, 0, 6.3, 1);   // RegPack: gain 1B to 2*Math.PI  
+         
+        // some light effects and color cycling   
+        c.fillStyle = 'hsl(' + (u.p > 0 ? 200 : 200 * Math.sin(A))+ ',90%,' + (u.l * x || 80) + '%)';
+        c.fill();   
+      }
+    } 
+
+    A += .01; // turn cube
+    
+}, 30);
+
+
+
+    </script>
+    <script>
+      (function(){var doc=document;var header=doc.getElementsByTagName("header")[0];var firstChild=header.firstChild;var p=doc.getElementsByClassName("p")[0];var n=doc.getElementsByClassName("n")[0];header.insertBefore(p,firstChild);header.insertBefore(n,firstChild);header.appendChild(doc.getElementsByTagName("p")[0])})();
+      (function reload(fullscreen){var doc=document;var header=doc.getElementsByTagName("header")[0];var iframe=doc.createElement("iframe");doc.body.appendChild(iframe);var iwin=iframe.contentWindow;var idoc=iframe.contentDocument;idoc.open();idoc.close();idoc.write("<!doctype html>"+'<html style="margin: 0; padding: 0; border: 0; width: 100%; height: 100%;">'+"<head>"+'<meta charset="utf-8">'+'<body style="margin: 0; padding: 0; border: 0; width: 100%; height: 100%;">'+(TOKEN_CANVAS_SHIM?'<canvas style="display: block;'+
+      (TOKEN_CENTER_CANVAS?" margin: auto;":"")+'"></canvas>':"")+"");if(TOKEN_CANVAS_SHIM){var canvas=idoc.getElementsByTagName("canvas")[0];var cs=canvas.style;idoc.body.clientWidth;cs.width=(canvas.width=Math.max(Math.min(TOKEN_MAX_WIDTH||innerWidth,innerWidth),0)||0)+"px";cs.height=(canvas.height=Math.max(Math.min(TOKEN_MAX_HEIGHT||innerHeight-50,innerHeight-50),0)||0)+"px"}if(TOKEN_RELOAD_ONORIENTATIONCHANGE)onorientationchange=reloadClick;iwin.AudioContext=iwin.AudioContext||
+      iwin.webkitAudioContext;iwin.requestAnimationFrame=iwin.requestAnimationFrame||iwin.mozRequestAnimationFrame||iwin.webkitRequestAnimationFrame||iwin.msRequestAnimationFrame||function(f){iwin.setTimeout(f,1E3/30)};if(TOKEN_CANVAS_SHIM)canvas.requestPointerLock=canvas.requestPointerLock||canvas.mozRequestPointerLock||canvas.webkitRequestPointerLock;idoc.body.requestPointerLock=idoc.body.requestPointerLock||idoc.body.mozRequestPointerLock||idoc.body.webkitRequestPointerLock;navigator.getUserMedia=navigator.getUserMedia||
+      navigator.webkitGetUserMedia||navigator.mozGetUserMedia||navigator.msGetUserMedia;if(TOKEN_CANVAS_SHIM)iwin.a=canvas;iwin.b=idoc.body;if(TOKEN_CANVAS_SHIM){if(!TOKEN_WEBGL)iwin.c=canvas.getContext("2d");if(TOKEN_WEBGL)iwin.g=function(){iwin.onorientationchange=iwin.onresize=null;try{var o={antialias:true,stencil:true};var gl=canvas.getContext("webgl",o)||canvas.getContext("experimental-webgl",o);iwin.__glExts=["OES_texture_float","OES_texture_float_linear","OES_standard_derivatives","EXT_texture_filter_anisotropic",
+        "MOZ_EXT_texture_filter_anisotropic","WEBKIT_EXT_texture_filter_anisotropic","WEBGL_compressed_texture_s3tc","MOZ_WEBGL_compressed_texture_s3tc","WEBKIT_WEBGL_compressed_texture_s3tc"].map(function(ext){return gl.getExtension(ext)})}catch(e){idoc.body.innerHTML="WebGL not supported.";iwin.a=iwin.b=iwin.c=iwin.d=null;throw e;}return gl}()}var demo=idoc.createElement("script");demo.textContent=doc.querySelector('script[type="demo"]').textContent;idoc.body.appendChild(demo);idoc.close();iframe.contentWindow.focus();
+        var firstLine=doc.getElementsByTagName("div")[0];function reloadClick(b){doc.body.removeChild(iframe);r.parentElement.removeChild(r);iframe=null;r=null;idoc=null;header=null;reload(b)}window.reload=reloadClick;var r=doc.createElement("div");r.innerHTML="&#8635;";r.className="button r";r.title="restart just the demo (local, without remote fetch)";r.onclick=reloadClick;header.insertBefore(r,firstLine)})();
+    </script>
+  </body>
+</html>

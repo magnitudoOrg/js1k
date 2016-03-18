@@ -1,0 +1,161 @@
+
+<!doctype html>
+<html>
+  <!-- note: your demo in this shim runs in an iframe with this content: https://gist.github.com/qfox/3cccc4f36c8319e09bb7 -->
+  <!--
+  (c) js1k.com 2015
+  Note: submissions belong to their respectful owner, do not copy without their consent
+  -->
+  <head>
+    <meta charset="utf-8">
+    <title>JS1k 2015 - NNNN - TITLE</title>
+    <meta name="author" content="YOU">
+    <link rel="icon" type="image/png" href="http://js1k.com/favicon.png">
+    <link rel="canonical" href="http://js1k.com/2015-hypetrain/demo/NNNN">
+    <link rel="shortlink" href="http://js1k.com/NNNN">
+    <script>
+      // GA
+    </script>
+    <style>
+      /* http://qfox.nl/notes/333 */
+      body,html,iframe{margin:0;padding:0;border:0;width:100%;height:100%}
+      iframe{position:absolute;top:0;left:0;padding-top:50px;box-sizing:border-box}
+      header{position:relative;z-index:1;height:47px;padding-top:2px;border-bottom:1px solid #000;box-shadow:0 -10px 25px #ccc inset;background-color:#eee}
+      aside,div,h1,p{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-align:center;font-size:16px;font-weight:inherit;line-height:22px;padding:0;margin:0;cursor:default}
+      aside,h1{display:inline}
+      a{color:#000;text-decoration:none;border-bottom:1px dashed #000}
+      a:hover{border-bottom:1px solid red}
+      a[href="0"]{text-decoration:line-through;pointer-events:none;border-bottom:0;color:#ccc}
+      .button{float:left;width:40px;height:40px;line-height:40px;text-align:center;padding:0;margin:2px 0 0 10px;border:1px solid #888;border-color:#ddd #888 #888 #ddd;font-family:sans-serif;font-size:30px;font-weight:700;cursor:pointer}
+      .button:hover{color:red;border-bottom-color:#888}
+      .r{margin-right:10px}
+      time{display:none}
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1>
+          <a href="http://js1k.com/">JS1k</a>
+          <a href="http://js1k.com/2015-hypetrain">2015</a>
+          <strong></strong> demo
+          &mdash;
+          "Connect Four 3D" by Oliver Güther
+        </h1>
+        <p>
+          <em>
+            Click on the field to position your ball! Click BELOW the field to confirm your move and let the AI work. The winner will be hyped.
+          </em>
+        </p>
+        <aside>
+          &mdash;
+          1018 bytes
+          &mdash;
+          <a href="http://js1k.com/2015-hypetrain/details/NNNN">demo details</a>
+          &mdash;
+          <a href="http://js1k.com/2015-hypetrain/demos">list of demos</a>
+          &mdash;
+          <a href="http://js1k.com/1955" title="short link for your mobile devices" rel="nofollow">js1k.com/NNNN</a>
+          <time datetime="NOW" pubdate>NOW</time>
+        </aside>
+      </div>
+
+      <a href="500" class="button p">&Larr;</a>
+      <a href="502" class="button n">&Rarr;</a>
+    </header>
+
+    <script type="shim">
+      // SHIM (will be ran in the context of the iframe...)
+
+      // unprefix some popular vendor prefixed things (but stick to their original name)
+      iwin.AudioContext = iwin.AudioContext || iwin.webkitAudioContext; // ios8 unmutes audio only during the first user triggered event with sound
+      iwin.requestAnimationFrame = iwin.requestAnimationFrame || iwin.mozRequestAnimationFrame || iwin.webkitRequestAnimationFrame || iwin.msRequestAnimationFrame || function(f){ iwin.setTimeout(f, 1000/30); };
+      canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock || canvas.webkitRequestPointerLock;
+      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+      a = canvas;
+      b = idoc.body;
+
+      if (webgl) iwin.c = canvas.getContext('2d');
+      else iwin.g = (function () {
+        iwin.onorientationchange = iwin.onresize = null;
+        try {
+          var o = { antialias: true, stencil: true };
+          var gl = canvas.getContext('webgl', o) || canvas.getContext('experimental-webgl', o);
+
+          // keep in scope, must not be garbage collected
+          iwin.__glExts =
+            [ 'OES_texture_float', 'OES_texture_float_linear', 'OES_standard_derivatives',
+              'EXT_texture_filter_anisotropic', 'MOZ_EXT_texture_filter_anisotropic', 'WEBKIT_EXT_texture_filter_anisotropic',
+              'WEBGL_compressed_texture_s3tc', 'MOZ_WEBGL_compressed_texture_s3tc', 'WEBKIT_WEBGL_compressed_texture_s3tc'
+            ].map(function(ext) {
+                return gl.getExtension(ext);
+              });
+        } catch (e) {
+          idoc.body.innerHTML = 'WebGL not supported.';
+          iwin.a=iwin.b=iwin.c=iwin.d=null;
+          throw e;
+        }
+
+        return gl;
+      })();
+    </script>
+    <script>
+      // submission form configurables:
+
+      // enable canvas shim at all? (2d/3d). other settings are ignored if this is false.
+      var TOKEN_CANVAS_SHIM = true;
+      // true enables webgl shim (exposes `g`), false enables canvas shim (exposes `c`)
+      var TOKEN_WEBGL = false;
+      // px, 0 means always 100%
+      var TOKEN_MAX_WIDTH = 400;
+      // px, 0 means always 100%
+      var TOKEN_MAX_HEIGHT = 500;
+      // only if width<100%
+      var TOKEN_CENTER_CANVAS = true;
+      // "press" reload button on orientation change?
+      var TOKEN_RELOAD_ONORIENTATIONCHANGE = true;
+    </script>
+    <script type="demo">
+eval(atob('Zm9yKF89JyIrKHUufipnLTEwUS0tOylPZm9yKE56T05NK2kqTDQ+WUtvJTRKPS0xSCkrRz4zRn0sRT0wRDIwQ1NbQl1beV1BQmxBW2tdQEJ6QVt4XR9jLmZpbGweKmNvcyhJHT0xHCphLyhtK2EbPVtdLBope04ZUCpIGC5tLhcmJigWPTQ7FSk7FGQubGVuZ3RoE0g7MT49Em8lMTYvNHwwEWUoSixZLBEpEHNpbigPKyspDjAsDHx8CyksCWlmKAhZPVIoUCxKLBEHcmV0dXJuIAYIEBZuHCkpBjsFKg9DKkktEykEehVNQnpdGnkVeU9CekE9WwwMDDBdO1AcLG5EA28cNjtvLS0WBywxCSEQCyEobhwpFBQCZnVuY3Rpb24ocyxrLGwsbSl7AU5hHGUzLFMaST1ZPQxnPTcMbxw1LAMsYi5vbmNsaWNrPQEIbhkDfQhzLnBhZ2VZPjQwMCl7BU4YLGg9bztvPkQ7GQIIIW4ZGCwCGH0Ibgsobz1oKysgKyg0KnJhbmRvbSgpfDApCQcJbj0MSylicmVha30FGCxZPTQsb0h9ZWxzZSBOO0sWQhFdW1ldW0pdRAlvKyssBwkhKEsUFEVlPQFOdRJ1O3UOTnYSdjt2Dk50EnQ7dA4IdAt2C3UZbT0MaT0tMzszPj1pO2kOej1sTHUseT1rTHYseD1zTHQsMD56C3pGCzA+eQt5RgswPngLeEYLKCFpCx89PVApJiZtKys7CG1GKQYxfUVSPQFOeT0zOzAhPUA7eS0tKQgwPT15KQY0OwZtCyhAPXMJeUVmPQEGaT1zHUdsKg9JCW09cyotD0lHbB0JdT1pG0dDDHY9KGsrQzApGwl7eDp1LHk6dix6Om19RXNldEludGVydmFsKAFOYy5jbGVhclJlY3QoDAxhLGEJZBp6FU15RDs1Pnk7eQ5OeBV4T3A9eUY/LjE6HyxwFm09Zih4UQx5KmcvMituBCx6UTAJZC5wdXNoKHttOm0scDpwLHI6Zy80LW0uei80NS1wBC0xLGw6biYmcD09UD82KzQEOjYqYWJzKHApfSkUTmQuc29ydCgBBnMXei1rF3p9CXo9EztNdT1kW3pdLHhEO3g8dS5yO3gOYy5iZWdpblBhdGgoCWMuYXJjKHUXeCx1F3ksdS5yLXgsDDYuMywxCR5TdHlsZT0iaHNsKH5wPjA/QzA6QzAqD0kpRyIsOTAlLH5sKngLODBHIiUpIiweKBRJKz0uMDFFMzAUJztnPS9bXiAtP0lQUi19XS8uZXhlYyhfKTspd2l0aChfLnNwbGl0KGcpKV89am9pbihzaGlmdCgpKTt3aXRoKE1hdGgpZXZhbChfKQ=='))
+  
+//for(_='"+(u.~*g-10Q--;)Ofor(NzONM+i*L4>YKo%4J=-1H)+G>3F},E=0D20CS[B][y]ABlA[k]@BzA[x]c.fill*cos(I=1*a/(m+a=[],){NP*H.m.&&(=4;);d.lengthH;1>=o%16/4|0e(J,Y,)sin(++)0,||),	if(Y=R(P,J,return n));*C*I-)zMBz]yyOBzA=[0];P,nDo6;o--,1	!!(n)function(s,k,l,m){Nae3,SI=Y=g=7o5,,b.onclick=n}s.pageY>400){N,h=o;o>D;!n,}n(o=h++ +(4*random()|0)		n=K)break},Y=4,oH}else N;KB][Y][J]D	o++,	!(KEe=Nuu;uNvv;vNtt;ttvum=i=-3;3>=i;iz=lLu,y=kLv,x=sLt,0>zzF0>yyF0>xxF(!i==P)&&m++;mF)1}ER=Ny=3;0!=@;y--)0==y)4;m(@=s	yEf=i=sGl*I	m=s*-IGl	u=iGCv=(k+C0)	{x:u,y:v,z:m}EsetInterval(Nc.clearRect(a,a	dzMyD;5>y;yNxxOp=yF?.1:,pm=f(xQy*g/2+n,zQ0	d.push({m:m,p:p,r:g/4-m.z/45-p-1,l:n&&p==P?6+4:6*abs(p)})Nd.sort(sz-kz}	z=;Mu=d[z],xD;x<u.r;xc.beginPath(	c.arc(ux,uy,u.r-x,6.3,1	Style="hsl(~p>0?C0:C0*I)G",90%,~l*x80G"%)",(I+=.01E30';g=/[^ -?IPR-}]/.exec(_);)with(_.split(g))_=join(shift());with(Math)eval(_)  
+    
+//for(_=')+~},O=4N=1Mu.pL+i*K4>YJ=0;Hs%4G[z]F*sin(EE20*ID||C>3C0>B*g-10Ac.fill@*cos(I);for(){.m.&&(200=-1P*,--;)=[],*a/(m+ad.length++);1>=s%16/4|0e(G,Y,)S[l][y][k]0,;zSF[y]	),if(Y=R(P,G,return nM));zNSFyN;y	=[0];PM,n=0sM6;s--,1!C!(nM)function(t,k,l,m){aMe3,SI=s=Y=g=7,b.onclick=n}t.pageY>400){h=s;s>H!nP*}nC(s=h++ +4*random()|0n=J)break}YN,s}else ;JS[][Y][G]=0s++,!(JOe=uu;uvv;vQQ;QQCvCum=i=-3;3>=i;iz=lKu,y=kKv,x=tKQ,0>zCzByCyBxCx>3C(!iC	[x]==P)&&m++;m>3)1}OR=y=3;0!=;y--)0==y)4;mC(=tyOf=o=t~lEIm=t*-sin(I~lu=o~20v=(k+){x:u,y:v,z:m}OsetInterval(c.clearRect(a,adzNyH5>y;yxN;xp=y>3?.1:	[x],pm=f(xAy*g/2,zA0d.push({m:m,r:g/4-m.z/45-pD-p:p})d.sort(tz-kz}z=u=dF,xHx<u.r;x+=2)c.beginPath(c.arc(ux,uy,u.r-x,6.3,1@Style="hsl("+(L>0?:+EI/2)~",80%,"+((n&&L==P?6+4D+z):6)*x*abs(L)C80~"%)",@(I+=.01O30';g=/[^ -?IP-}]/.exec(_);)with(_.split(g))_=join(shift());with(Math)eval(_)    
+    
+// latest refa
+//for(_='*g-10~--;)Ofor(NzONM+i*L4>YK=0;Jt%4H=-1Gm.F)+E>3D},C=1BS[A][y]@Al@[k]Az@[x]c.fill*cos(I*a/(m+a=[],){NP*G&&(=4;200u.);d.lengthG;1>=++)t%16/4|0e(H,Y,)sin(||0,	if(),Y=R(P,H,return sB));zMAz]yyOAz@=[			0];PB,s=	tB6;t--,1!!(sB)function(j,k,l,m){NaBe3,SI=t=Y=	g=7	h=.01,b.onclick=sh+=.01}j.pageY>400){N,n=t;t>J!s,}s(t=n++ +4*random()|0s=	K)break},Y=4,tG}else N;KA][Y][H]=0t++,!(KCe=Nuu;uNvv;vNQQ;QQvum=	i=-3;3>=i;iz=lLu,y=kLv,x=jLQ,0>zzD0>yyD0>xxD(!i==P)&&m++;mD)1}CR=Ny=3;0!=;y--)0==y)4;m(=jyCf=o=jEl*Im=j*-IElu=oE20	v=(k+){x:u,y:v,z:m}CsetInterval(Nc.clearRect(		a,adzMyJ5>y;yNxxOp=yD?.1:,pm=f(x~	y*g/2,z~0d.push({m:m,r:g/4-Fz/45-p*20*I-p:p})Nd.sort(j.Fz-k.Fz}z=;Mu=d[z],xJx<r;x++)c.beginPath(c.arc(Fx,Fy,r-x,	6.3,1Style="hsl("+(p>0?:+*I/4)E",80%,"+((s&&p==P?8:5)*x*abs(p)80E"%)",(I+=hC30';g=/[^ -?IP-}]/.exec(_);)with(_.split(g))_=join(shift());with(Math)eval(_)  
+  
+    
+// hightlight all winner stones
+//for(_=')+~},O==N=4M=1Lu.pK+i*J4>YH=0;Gt%4F[z]E||D>3D0>C*g-10Bc.fillA*cos(I@);for(){.m.&&(200=-1P*,--;)=[],*a/(q+ad.length++);1>=sin(t%16/4|0e(F,Y,)S[l][y][k]0,;zSE[y]	),if(Y=R(P,F,return sL));zMSEyM;y	=[0];PL,s=0tL6;t--,1!D!(sL)function(j,k,l,m){aLe3,SI=t=Y=g=7,b.onclick=1Ns}j.pageY>400){h=t;t>G!sP*}sD(t=h++ +4*random()|0s=H)break}YM,t}else ;HS[][Y][F]=0t++,!(HOe=uu;uvv;vQQ;QQDvDun=i=-3;3>=i;iz=lJu,y=kJv,x=jJQ,0>zDzCyDyCxDx>3D(	[x]NPD0Ni)&&n++;n>3)1}OR=y=3;0!=;y--)0Ny)4;mD(=jyOf=o=j@~l*Iq=j*-I~l@u=o~20v=(k+){x:u,y:v,z:q}OsetInterval(c.clearRect(a,adzMyG5>y;yxM;xp=y>3?.1:	[x],pm=f(xBy*g/2,zB0d.push({m:m,r:g/4-m.z/45-(0>y?0:p*20*I+)p:p})d.sort(jz-kz}z=u=dE,xGx<u.r;x+=2)c.beginPath(c.arc(ux,uy,u.r-x,6.3,1AStyle="hsl("+(K>0?:+*I/4)~",80%,"+(5*(s&&KNP?2:1)*x*abs(K)D80~"%)",A(I+=.01O30';g=/[^ -?IP-}]/.exec(_);)with(_.split(g))_=join(shift());with(Math)eval(_)
+
+// highlight one stone on win
+//for(_='*g-10~--;)Ofor(NzONM+i*L4>YKQ%4J=-1H)+G>3F},E=0DS[C][y]BClB[k]ACzB[x]@c.fill*cos(I=1*a/(q+a=[],){NP*H.m.&&(=4;200d.lengthH;1>=++));Q%16/4|0e(J,Y,)sin(0,||C][Y][J]	if(),Y=R(P,J,return Q6;Q--,1!!(t)	*=2));zMCz]yyOCzB=[0];P,tDfunction(j,k,l,m){Nae3,SI=Q=Y=g=7,b.onclick=1==t}j.pageY>400){N,s=Q;Q>D;t)!th=,h)}th(Q=s++ +4*random()|0K)break},Y=4,QH}else N;K	DQ++,!(KEe=Nuu;uNvv;vNww;wwvun=i=-3;3>=i;iz=lLu,y=kLv,x=jLw,0>zzF0>yyF0>xxF(@==P0==i)&&n++;nF)1}ER=Ny=3;0!=A;y--)0==y)4;m(A=jyEf=o=jGl*Iq=j*-IGlu=oG20v=(k+){x:u,y:v,z:q}EsetInterval(Nc.clearRect(a,adzMyD;5>y;yNxxOp=yF?.1:@,pm=f(x~y*g/2,z~0d.push({m:m,r:g/4-m.z/45-(0>y?0:p*20*I+)p:p})Nd.sort(jz-kz}z=;Mu=d[z],xD;x<u.r;x+=2)c.beginPath(c.arc(ux,uy,u.r-x,6.3,1Style="hsl("+(u.p>0?:+*I/4)G",80%,"+(5*x*abs(u.p)80G"%)",(I+=.01E30';g=/[^ -?IP-}]/.exec(_);)with(_.split(g))_=join(shift());with(Math)eval(_)
+
+    
+//for(E=800,C=[],X=A=Y=0,L=70,z=4;z--;)for(C[z]=[],y=4;y--;)C[z][y]=[0,0,0,0];P=1,W=0,b.onclick=function(j,k,l,m){if(1==W){for(z=4;z--;)for(C[z]=[],y=4;y--;)C[z][y]=[0,0,0,0];P=1,W=0}if(j.pageY>400){if(H(X%4,Y,~~(X%16/4))&&(W=1)&&(C[~~(X%16/4)][Y][X%4]*=2))return ;for(P*=-1;X>=0;){for(X=16;X--&&(Y=B(P,X%4,~~(X%16/4),1),!H(X%4,Y,~~(X%16/4))||!(W=1)););if(!W){for(O=0,P*=-1,X=16;X--&&(Y=B(P,X%4,~~(X%16/4),1),!H(X%4,Y,~~(X%16/4))||!(O=1)););P*=-1}if(W||O||(X=~~(16*Math.random())),Y=B(P,X%4,~~(X%16/4)),4>Y)break}if(H(X%4,Y,~~(X%16/4))&&(W=1)&&(C[~~(X%16/4)][Y][X%4]*=2))return ;P*=-1,X=-1}else for(;X>=0&&4>Y&&(C[~~(X%16/4)][Y][X%4]=0),X++,Y=B(P,X%4,~~(X%16/4)),4<=Y;);},H=function(j,k,l,m){for(u=-1;1>=u;u++)for(v=-1;1>=v;v++)for(w=-1;1>=w;w++)if(w||v||u){for(n=0,i=-3;3>=i;i++)z=l+i*u,y=k+i*v,x=j+i*w,0>z||z>3||0>y||y>3||0>x||x>3||(C[z][y][x]==P||0==i)&&n++;if(n>3)return 1}},B=function(j,k,l,m){for(y=3;0!=C[l][y][k];y--)if(0==y)return 4;return m||(C[l][y][k]=j),y},J=function(j,k,l,m){return o=j*Math.cos(A)+l*Math.sin(A),q=j*-Math.sin(A)+l*Math.cos(A),u=o*E/(q+E)+200,v=(k+200)*E/(q+E),{x:u,y:v,z:q}},setInterval(function(j,k,l,m){for(c.clearRect(0,0,E,E),d=[],z=4;z--;)for(y=0;5>y;y++)for(x=4;x--;)p=y>3?.1:C[z][y][x],p&&(m=J(x*L-100,y*L/2,z*L-100),d.push({m:m,r:L/4-m.z/45-(0>y?0:p*Math.sin(20*A+d.length)),p:p}));for(d.sort(function(j,k,l,m){return j.m.z-k.m.z}),z=d.length;z--;)for(u=d[z],x=0;x<u.r;x+=2)c.beginPath(),c.arc(u.m.x,u.m.y,u.r-x,0,6.3,1),c.fillStyle="hsl("+(u.p>0?200:200+200*Math.sin(A/4))+",80%,"+(5*x*Math.abs(u.p)||80)+"%)",c.fill();A+=.01},30);
+
+    
+//for(_='cos(IL--;)Kfor(JzKJH=f.Gl%4FreturnEE D>3C},B00A2A@c.fillbreak}.push(0>R[++y;y)Jx][nyf]toe]*P/(Q+P.m.=4;=[]){d.length-1else +n*sin(||	function(r,f=;1>=),0,~~(l%16/4)Y,F,k<0;);if(,nJP=80R,Y=1,l=,I=k=h=7zHz],yyKzy]=[0];b.onclick=r.pageY>4AJ;l+=~~(3*random()k=O(*l=}J;l	k	(kF]=0l,k=O(BS=var t,o,e,n,i,u,a,c=s;Jzz;z)Jyx;x)(x	y	z)&&(u=1A*z+10*y+x,s.indexOf(*u)<0)Jsui=a=n=-3;3>=n;n)tGzz,oGyy,eGxx,t	tC	o	oC	e	eCa>0)a,==r)i;0!=i--;4==aiC)D@;3==i&&c}}DcBO=Jy=3;0!=;y--)0==y)E;D=r,yBg=Do=r*L)IQ=r*-I)Lu=o)+20v=(f+@){x:u,y:v,z:Q}BsetInterval(Jc.clearRect(P,PS(Y,{x:F,y:k,z:})>1A&&h--,d,zHy=0;5>xKp=yC?.1:zyx],p&&(m=g(x*h0y*h/2,z*hAd{m:m,r:h/4-m.z/45-(y?0:p*20*I+)p:p}));Jd.sort(Drz-fz}z=;Hu=d[z],x=0;x<u.r;x+=2)c.beginPath(c.arc(ux,uy,u.r-x,6.3,1Style="hsl("+(u.p>0?@:@+@*I/4))+",80%,"+(5*x*abs(u.p)	80)+"%)",();I+=.01B30);';g=/[^ -?IO-~]/.exec(_);)with(_.split(g))_=join(shift());with(Math)eval(_)
+  
+  
+//for(_='c.NNfillMcos(IL--;)Kfor(JzKJH=f.Gl%4Fbreak}E.push(DreturnCC Bm.A>3@},002++y;y)JxR[][nyf]toe]*P/(Q+P=4;=[]u.0>d.lengthelse +n*sin(){-1=;1>=	function(r,f||~~(l%16/4)if(),0,Y,F,k<0;);,nJP=80R,Y=1,l=,I=k=h=7zHz],yyKzy]=[0];b.onclick=r.pageY>4J;l+=~~(3*random()k=O(*l=}J;lk(kF]=0l,k=O(S=c=s;Jz	z;z)Jy		x;x)(xyz)&&(u=1*z+10*y+x,s.indexOf(*u)<0)JsDui=a=n=-3;3>=n;n)tGzz,oGyy,eGxx,tt@oo@ee@a>0)Ea,==r)i;0!=i--;E4==ai@)B;3==i&&c}}BcO=Jy=3;0!=;y--)0==y)C;B=r,yg=Bo=r*L)IQ=r*-I)Lu=o)+20v=(f+){x:u,y:v,z:Q}setInterval(JNclearRect(P,PS(Y,{x:F,y:k,z:})>1&&h--,d,zHy=0;5>xKp=y@?.1:zyx],p&&(m=g(x*h0y*h/2,z*hdD{m:m,r:h/4-Az/45-(y?0:p*20*I+)p:p}));Jd.sort(Br.Az-f.Az}z=;Hu=d[z],x=0;x<r;x+=2)NbeginPath(Narc(Ax,Ay,r-x,6.3,1MStyle="hsl("+(p>0?:+*I/4))+",80%,"+(5*x*abs(p)80)+"%)",M();I+=.0130);';g=/[^ -?IO-~]/.exec(_);)with(_.split(g))_=join(shift());with(Math)eval(_)  
+  
+//for(_='cos(IW++VV)Uc.T*kN.5NM===L=n.Ks%4Jfor(Hy;yUHxG),FFTfillEbreak}D.push(CreturnBR[A][@Af@y@n]At@o@e]*P/(Q+P){function(r,n,f=&&,y00--;);zHd.length.m.=[]B },=4else +f*sin(	-1=;1>=0>||~~(s%16/4)Y,J,);while(l)0,if(HP=80R,Y=1,s=,I=l=k=zAz];yAz@y]=[0];b.onclickr.pageY>5do s+=~~(4*random()Fl=O(*;s=}do sl(A@l@J]=0FsV,l=O(Svar t,o,e,f,i,u,c,a=h;Hzz;zUHyGx;xU(xyz)(u=1*z+10*y+x,h.indexOf(*u)<0)HhCuFi=c=f=-3;3>=f;fUtKzz,oKyy,eKxx,tt>3oo>3ee>3c>0)DcV,Lr)iV;0!=i--;D4Lci>)1;3LiaV}}aOHy=0;0!=;)yV>)B;=rgo=r*W)	IFQ=r*-	I)WFu=o)+20v=(n+2)F{x:u:v,z:Q}wn=n*abs(r)8"hsl("+(r>0?2:180+180*	I/4))+",80%,"+n+"%)"setInterval(HTclearRect(P,PFS(Y,{x:J:l,z:})>10k--,d,zy=;4>G;xp=y?.1:Az@y@x],p(m=g(xNM,-yN/2+1M,zNMFdC{m:m,r:k/4-m.z/45-(y?0:p*	20*I+)Fp:p}));Hd.sort(rz-nz}Fz=u=d[z],x=0;x<u.r;x+=2)TbeginPath(FTarc(ux,uy,u.r-x,6.3,1EStyle=w(u.p,5*xE();7kkV,I+=.0130);';g=/[^ -?IO-SY-~]/.exec(_);)with(_.split(g))_=join(shift());with(Math)eval(_)  
+        
+//for(_='c.W*wV.5VU=p.T=M.H),GGWfillFbreak}E.push(DreturnCh[B][ABiAyAf]@BnAeAo]*P/(q+P(I00++)y;yd.length=0;4>.m.=[]C },else ~~(Q%16/4)+i*for(;z-1=;1>=	0>){||if(function(r,f=,i0,Y,Q%4,);while(N)M=Math,RHrandom,SHsin,OHcos,P=80I=h,Y=1,Q=,w=7zzBz],yBzAy]=[0];b.onclickr.pageY>5do Q+=~~(4*R()GN=g(*;Q=}do QN(BANAQ%4]=0GQ,N=g(kl=a;z	zy	x	x;x(xyz)&&(t=1*z+10*y+x,a.indexOf(*t)<0)aDtGu=c=i=-3;3>=i;inTzz,eTyy,oTxx,nn>3ee>3oo>3c>0)Ec,==player)u;0!=u--;E4==cu>=4)1;3==u&&l}}lgy0!=@;)y,y>=4)C;@=r,yso=r*O)SGq=r*-S)OGu=o)+20v=(f+2)G{x:u,y:v,z:q}ji=f*M.abs(r)9"hsl("+(r>0?2:180+180*S))+", 80%, "+i+"%)"setInterval(,nWclearRect(P,PGd,zzy=;4>xx;xp=y?.1:BzAyAx],p&&(m=s(xVU,-yV/2+1U,zVUGdD{m:m,r:w/4-m.z/45-(y?0:p*S(20*I+)Gp:p}));d.sort(fz-rz}Gzz<u=d[z],ii<u.r;i+=2)WbeginPath(GWarc(ux,uy,u.r-i,6.3,1FStyle=j(u.p,5*iF();I+=.0130);';g=/[-@-HT-W]/.exec(_);)with(_.split(g))_=join(shift());eval(_)
+
+
+    </script>
+    <script>
+      (function(){var doc=document;var header=doc.getElementsByTagName("header")[0];var firstChild=header.firstChild;var p=doc.getElementsByClassName("p")[0];var n=doc.getElementsByClassName("n")[0];header.insertBefore(p,firstChild);header.insertBefore(n,firstChild);header.appendChild(doc.getElementsByTagName("p")[0])})();
+      (function reload(fullscreen){var doc=document;var header=doc.getElementsByTagName("header")[0];var iframe=doc.createElement("iframe");doc.body.appendChild(iframe);var iwin=iframe.contentWindow;var idoc=iframe.contentDocument;idoc.open();idoc.close();idoc.write("<!doctype html>"+'<html style="margin: 0; padding: 0; border: 0; width: 100%; height: 100%;">'+"<head>"+'<meta charset="utf-8">'+'<body style="margin: 0; padding: 0; border: 0; width: 100%; height: 100%;">'+(TOKEN_CANVAS_SHIM?'<canvas style="display: block;'+
+      (TOKEN_CENTER_CANVAS?" margin: auto;":"")+'"></canvas>':"")+"");if(TOKEN_CANVAS_SHIM){var canvas=idoc.getElementsByTagName("canvas")[0];var cs=canvas.style;idoc.body.clientWidth;cs.width=(canvas.width=Math.max(Math.min(TOKEN_MAX_WIDTH||innerWidth,innerWidth),0)||0)+"px";cs.height=(canvas.height=Math.max(Math.min(TOKEN_MAX_HEIGHT||innerHeight-50,innerHeight-50),0)||0)+"px"}if(TOKEN_RELOAD_ONORIENTATIONCHANGE)onorientationchange=reloadClick;iwin.AudioContext=iwin.AudioContext||
+      iwin.webkitAudioContext;iwin.requestAnimationFrame=iwin.requestAnimationFrame||iwin.mozRequestAnimationFrame||iwin.webkitRequestAnimationFrame||iwin.msRequestAnimationFrame||function(f){iwin.setTimeout(f,1E3/30)};if(TOKEN_CANVAS_SHIM)canvas.requestPointerLock=canvas.requestPointerLock||canvas.mozRequestPointerLock||canvas.webkitRequestPointerLock;idoc.body.requestPointerLock=idoc.body.requestPointerLock||idoc.body.mozRequestPointerLock||idoc.body.webkitRequestPointerLock;navigator.getUserMedia=navigator.getUserMedia||
+      navigator.webkitGetUserMedia||navigator.mozGetUserMedia||navigator.msGetUserMedia;if(TOKEN_CANVAS_SHIM)iwin.a=canvas;iwin.b=idoc.body;if(TOKEN_CANVAS_SHIM){if(!TOKEN_WEBGL)iwin.c=canvas.getContext("2d");if(TOKEN_WEBGL)iwin.g=function(){iwin.onorientationchange=iwin.onresize=null;try{var o={antialias:true,stencil:true};var gl=canvas.getContext("webgl",o)||canvas.getContext("experimental-webgl",o);iwin.__glExts=["OES_texture_float","OES_texture_float_linear","OES_standard_derivatives","EXT_texture_filter_anisotropic",
+        "MOZ_EXT_texture_filter_anisotropic","WEBKIT_EXT_texture_filter_anisotropic","WEBGL_compressed_texture_s3tc","MOZ_WEBGL_compressed_texture_s3tc","WEBKIT_WEBGL_compressed_texture_s3tc"].map(function(ext){return gl.getExtension(ext)})}catch(e){idoc.body.innerHTML="WebGL not supported.";iwin.a=iwin.b=iwin.c=iwin.d=null;throw e;}return gl}()}var demo=idoc.createElement("script");demo.textContent=doc.querySelector('script[type="demo"]').textContent;idoc.body.appendChild(demo);idoc.close();iframe.contentWindow.focus();
+        var firstLine=doc.getElementsByTagName("div")[0];function reloadClick(b){doc.body.removeChild(iframe);r.parentElement.removeChild(r);iframe=null;r=null;idoc=null;header=null;reload(b)}window.reload=reloadClick;var r=doc.createElement("div");r.innerHTML="&#8635;";r.className="button r";r.title="restart just the demo (local, without remote fetch)";r.onclick=reloadClick;header.insertBefore(r,firstLine)})();
+    </script>
+  </body>
+</html>
