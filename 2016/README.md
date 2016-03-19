@@ -1,3 +1,4 @@
+# Real Molecules
 Explore 30 real molecules like alcohol, acid, ether, methane, ethane, ammonia, amines, water...wait 3 s or refresh to speed up, see descr
 
 Generates molecules like alcohol, acid, ether, methane, ethane, ammonia, amines, alkanes, alkanols, water.
@@ -12,5 +13,11 @@ Features:
 
 Update 1:
 - Added light reflection effect
+
+Improved after JS1k 2016 submission:
+ - removed var assignments for static strings
+ - removed function used only once
+ - TODO check if merging strings will pay of
+ - TODO check a 2nd time if c.globalCompositeOperation couldn't be replaced by changing drawing order
 
 
