@@ -9,28 +9,20 @@
  * Subscript in formula looks best in Firefox, okay in Chrome, worst in IE 11, Edge not tested.
  * 
  * Features:
- * - Generates 30 real existing unique molecules (bonds checked H:1 O:2 N:3 C:4, double bond in f. acid for O)
+ * - Generates 30 real existing unique molecules
  * - 2.5D Molecule with approx. real atom distances and radius ratio (H < C), angles ~real for most m.
  * - Chemical empirical formula
  * - Molecule name or group name
  * - Symbol for a characteristic property of the molecule (burnable, toxic, fishy smell... ;)
  *
- *
- * Improved after JS1k 2016 submission:
- * - removed var assignments for static strings
- * - removed function used only once
- * - TODO check if merging strings will pay of
- * - TODO check a 2nd time if c.globalCompositeOperation couldn't be replaced by changing drawing order
- *
  * Thanks to JS1k organizers/contributors/participants, RegPack and UglifyJS developers!
  *
  */  
   
-q = 1,  // E = [q=1,0,0,0] saves 1 B but loses variety 
+q = 1,
 // Regex for the following molecules/groups
-// -> has gone inline!
-//R = '^10,^20,^30,^330,^130,^3310|^1330,^310,^3+0,^3+10|^13+0,2', 
-//T = 'water,ammonia,methane,ethane,methyl alcohol,alcohol,formic acid,alkane group,alkanol group,amine group,ether group',
+R = '^10,^20,^30,^330,^130,^3310|^1330,^310,^3+0,^3+10|^13+0,2', 
+T = 'water,ammonia,methane,ethane,methyl alcohol,alcohol,formic acid,alkane group,alkanol group,amine group,ether group',
 
 
 // draw atom, then gen. next atoms, recursive
@@ -87,15 +79,10 @@ C = function(j, k, l, m, n) {
 }
 
 
-// init and render scene 
-U = function(j, k, l, m, n) {   
-    c.clearRect(0,0,3e3,3e3);
-
-    E = [1,0,0,0]; // E = [q=1,0,0,0] saves 1 B but loses variety 
-    h = '';
-    C({t: 0, o: q*2.6}, 0, 20, 200, 0);
+// printFormulaAndName(ignore, ignore, x, y)
+S = function(j, k, l, m, n) {
+    s = '';
     
-    s = '';  
     // determine empirical formula 
     // most redundant form compresses well with RegPack
     t = 3; s += E[t] ? 'C' + (E[t] > 1 ? E[t] > 9 ? String.fromCharCode(8320 + E[t]/10) + String.fromCharCode(8320 + E[t]%10) : String.fromCharCode(8320 + E[t]%10) : '')  : '';  
@@ -105,7 +92,7 @@ U = function(j, k, l, m, n) {
     t = 1; s += E[t] ? 'O' + (E[t] > 1 ? E[t] > 9 ? String.fromCharCode(8320 + E[t]/10) + String.fromCharCode(8320 + E[t]%10) : String.fromCharCode(8320 + E[t]%10) : '')  : '';   
 
     // determine the molecule (group) from formula pattern
-    for (t = 0;!h.match('^10,^20,^30,^330,^130,^3310|^1330,^310,^3+0,^3+10|^13+0,2'.split(',')[t]) && ++t;); 
+    for (t = 0;!h.match(R.split(',')[t]) && ++t;); 
     // the following line is normally not part of the loop but saves 1 B if ; is cut after loop
     
     c.font = 'small-caps 20px s';   
@@ -113,8 +100,22 @@ U = function(j, k, l, m, n) {
     
     // 'unicode'[t] works with 2 B but not with 4 B Unicode chars!
     // direct alternative without extra '01221432265'[t] saves 1 - 2 B, but RegPack 4.0.1 dont like it and we still have B left, no need for hand-opt. :)
-    c.fillText(s + ' ' + 'water,ammonia,methane,ethane,methyl alcohol,alcohol,formic acid,alkane group,alkanol group,amine group,ether group'.split(',')[t] + ' ' + '☔,☠,🔥,⚕,🍷,☣,૮'.split(',')['01221432265'[t]], 20, 350); // manual todo: after RegPack replace ૮ by 🐬
+    c.fillText(s + ' ' + T.split(',')[t] + ' ' + '☔,☠,🔥,⚕,🍷,☣,૮'.split(',')['01221432265'[t]], l, m); // manual todo: after RegPack replace ૮ by 🐬
     
+    // Debug code for balancing
+    //c.font = '12px s'; window.cnt = window.cnt || 0; window.A = window.A || [0,0,0,0,0,0,0,0,0,0,0]; A[t]++; cnt++; for (aa in A) c.fillText(~~(100*(A[aa]/cnt)), aa*28, 400);c.font = 'small-caps 20px s';
+    //window.A = window.A || {}; A[h] = 1; c.fillText(Object.keys(A).length, 100, 20); // count molecules
+}
+
+
+// init and render scene 
+U = function(j, k, l, m, n) {   
+    c.clearRect(0,0,3e3,3e3);
+
+    E = [1,0,0,0]; // E = [q=1,0,0,0] saves 1 B but loses variety 
+    h = '';
+    C({t: 0, o: q*2.6}, 0, 20, 200, 0);
+    S({t: 0, o: q*2.6}, 0, 20, 350, 0);
     
     // Debug code for a distinct molecule
     //if (h.match(/^21330/)) clearInterval(iid);
